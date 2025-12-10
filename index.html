@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日快乐！</title>
+    <style>
+        /* --- 全局样式 --- */
+        body {
+            margin: 0;
+            padding: 0;
+            /* === 新的背景设置开始 === */
+            /* 这里的 url('bg.jpg') 就是相对路径，意思是找当前文件旁边的 bg.jpg */
+            background-image: url('bg.jpg'); 
+
+            /* 确保图片铺满整个屏幕，不留空白，可能会裁切掉一部分 */
+            background-size: cover; 
+
+            /* 图片居中显示 */
+            background-position: center center;
+
+            /* 防止图片重复平铺 */
+            background-repeat: no-repeat;
+
+            /* 背景固定住，不随着页面滚动，适合全屏背景 */
+            background-attachment: fixed;
+            /* === 新的背景设置结束 === */
+            font-family: 'Microsoft YaHei', sans-serif;
+            overflow: hidden; /* 防止滚动条出现 */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- 中心蛋糕样式 (纯CSS画的，无需图片) --- */
+        .cake-container {
+            position: absolute;
+            bottom: 15%;
+            text-align: center;
+            z-index: 1;
+        }
+        .cake {
+            width: 200px;
+            height: 100px;
+            background: #f48fb1;
+            border-radius: 50% 50% 10px 10px;
+            position: relative;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .cake::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 60px;
+            background: #f8bbd0;
+            border-radius: 50%;
+            border-bottom: 5px solid #fff;
+        }
+        .candle {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 40px;
+            background: #ffeb3b;
+            border-radius: 5px;
+        }
+        .flame {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 15px;
+            background: #ff5722;
+            border-radius: 50% 50% 20% 20%;
+            animation: flicker 1s infinite alternate;
+        }
+
+        /* --- 开场模态框样式 (模仿图2) --- */
+        .start-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 9999;
+            text-align: center;
+            overflow: hidden;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .modal-header {
+            background: #f5f5f5;
+            padding: 15px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+        .modal-body {
+            padding: 30px 20px;
+            font-size: 18px;
+            color: #555;
+        }
+        .modal-footer {
+            padding: 0 20px 20px 20px;
+        }
+        .btn-confirm {
+            width: 100%;
+            padding: 12px;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-confirm:hover {
+            background: #1976d2;
+        }
+
+        /* --- 弹窗样式 --- */
+        .popup-window {
+            position: absolute;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            min-width: 180px;
+            max-width: 250px;
+            overflow: hidden;
+            animation: floatUp 10s forwards; /* 慢慢向上飘并消失 */
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .popup-header {
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* 不同颜色的弹窗头部 */
+        .style-pink .popup-header { background: #ffe0e9; color: #d81b60; }
+        .style-blue .popup-header { background: #e3f2fd; color: #1976d2; }
+        .style-yellow .popup-header { background: #fff9c4; color: #fbc02d; }
+        .style-purple .popup-header { background: #f3e5f5; color: #8e24aa; }
+        .style-green .popup-header { background: #e8f5e9; color: #388e3c; }
+
+        .popup-content {
+            padding: 15px;
+            font-size: 16px;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* --- 动画定义 --- */
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1); opacity: 1; }
+            100% { transform: translateX(-50%) scale(1.2); opacity: 0.8; }
+        }
+        @keyframes popIn {
+            from { transform: translate(-50%, -40%) scale(0.8); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+        @keyframes floatUp {
+            0% { transform: scale(0.5); opacity: 0; margin-top: 50px; }
+            10% { transform: scale(1); opacity: 1; margin-top: 0; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px); opacity: 0; }
+        }
+        
+        /* 隐藏音乐播放器 */
+        #bgm { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="cake-container">
+        <div class="cake">
+            <div class="candle">
+                <div class="flame"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="start-modal" id="startModal">
+        <div class="modal-header">
+            <span>🎃</span> 雯雯公主👸🏻
+        </div>
+        <div class="modal-body">
+            祝你生日快乐呀~🎂
+        </div>
+        <div class="modal-footer">
+            <button class="btn-confirm" onclick="startSurprise()">确定</button>
+        </div>
+    </div>
+
+    <audio id="bgm" loop>
+        <source src="https://down.ear0.com:3321/preview?soundid=38450&type=mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // ================= 自定义配置区 =================
+        // 你可以在这里修改想要弹出的文字
+        const messages = [
+            "🎂 生日快乐！",
+            "✨ 又长一岁啦",
+            "💖 所求皆如愿",
+            "💰 八方来财",
+            "🌟 岁岁欢愉",
+            "🍀 平安健康",
+            "🥳 顺顺利利",
+            "🌈 笑口常开",
+            "👑 小公主生日快乐",
+            "🦄 年年胜意"
+        ];
+
+        // 弹窗出现的速度（毫秒），越小越快
+        const speed = 400; 
+        // ==============================================
+
+        const styles = ['style-pink', 'style-blue', 'style-yellow', 'style-purple', 'style-green'];
+        const icons = ['❤️', '🧡', '💛', '💚', '💙', '💜', '💖', '✨', '🎂', '🎁'];
+
+        function startSurprise() {
+            // 1. 隐藏开场模态框
+            document.getElementById('startModal').style.display = 'none';
+            
+            // 2. 尝试播放音乐
+            const audio = document.getElementById('bgm');
+            audio.volume = 0.5;
+            audio.play().catch(() => console.log('浏览器阻止了自动播放，需用户交互'));
+
+            // 3. 开始无限弹窗
+            setInterval(createPopup, speed);
+        }
+
+        function createPopup() {
+            // 创建元素
+            const div = document.createElement('div');
+            const randomStyle = styles[Math.floor(Math.random() * styles.length)];
+            const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+            const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+            
+            div.className = `popup-window ${randomStyle}`;
+            
+            div.innerHTML = `
+                <div class="popup-header">
+                    <span>${randomIcon}</span> 永远爱你❤️公主
+                </div>
+                <div class="popup-content">
+                    ${randomMsg}
+                </div>
+            `;
+
+            // 随机位置计算
+            // 为了不超出屏幕，减去大约宽高度
+            const x = Math.random() * (window.innerWidth - 200);
+            const y = Math.random() * (window.innerHeight - 150);
+
+            div.style.left = `${x}px`;
+            div.style.top = `${y}px`;
+            
+            // 随机层级，让新出来的可能在上面也可能在下面
+            div.style.zIndex = Math.floor(Math.random() * 100);
+
+            document.body.appendChild(div);
+
+            // 为了防止页面元素过多卡顿，动画结束后（10秒）移除元素
+            setTimeout(() => {
+                div.remove();
+            }, 10000);
+        }
+    </script>
+</body>
+</html>
