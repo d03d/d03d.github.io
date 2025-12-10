@@ -32,57 +32,6 @@
             justify-content: center;
             align-items: center;
         }
-
-        /* --- 中心蛋糕样式 (纯CSS画的，无需图片) --- */
-        .cake-container {
-            position: absolute;
-            bottom: 15%;
-            text-align: center;
-            z-index: 1;
-        }
-        .cake {
-            width: 200px;
-            height: 100px;
-            background: #f48fb1;
-            border-radius: 50% 50% 10px 10px;
-            position: relative;
-            margin: 0 auto;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        .cake::before {
-            content: '';
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 180px;
-            height: 60px;
-            background: #f8bbd0;
-            border-radius: 50%;
-            border-bottom: 5px solid #fff;
-        }
-        .candle {
-            position: absolute;
-            top: -60px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 10px;
-            height: 40px;
-            background: #ffeb3b;
-            border-radius: 5px;
-        }
-        .flame {
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 10px;
-            height: 15px;
-            background: #ff5722;
-            border-radius: 50% 50% 20% 20%;
-            animation: flicker 1s infinite alternate;
-        }
-
         /* --- 开场模态框样式 (模仿图2) --- */
         .start-modal {
             position: fixed;
@@ -289,4 +238,5 @@
         }
     </script>
 </body>
+
 </html>
